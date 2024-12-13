@@ -12,6 +12,7 @@ app.use(express.json());
 
 app.use('/api/invoices', invoiceRoutes);
 
+
 mongoose.connect(process.env.MONGO_URI as string, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB Connected"))
     .catch((err) => console.log(err));

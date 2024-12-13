@@ -44,13 +44,15 @@ const Register: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Registration failed');
+        const errorDetails = await response.json(); // Extract error details if available
+        throw new Error(errorDetails.message || 'Registration failed');
       }
 
       // Redirect to Add Product page after successful registration
       navigate('/add-products');
-    } catch (error) {
-      setError('Something went wrong. Please try again.');
+    } catch (error: any) {
+      console.error('Error during registration:', error); // Log error for debugging
+      setError(error.message || 'Something went wrong. Please try again.');
     } finally {
       setLoading(false); // Stop loading when request is done
     }
@@ -75,7 +77,7 @@ const Register: React.FC = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="bg-black bg-opacity-10 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white text-opacity-55"
+              className="bg-black bg-opacity-10 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
             />
           </div>
 
@@ -92,7 +94,7 @@ const Register: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="bg-black bg-opacity-10 text-white text-opacity-55 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-black bg-opacity-10 text-black mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -109,7 +111,7 @@ const Register: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="bg-black bg-opacity-10 text-white text-opacity-55 mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-black bg-opacity-10 text-black mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -130,7 +132,7 @@ const Register: React.FC = () => {
             </button>
 
             <div className="ml-4">
-              <p className="text-sm text-[12px]">
+              <p className="text-sm">
                 Already have an account?{' '}
                 <a href="/login" className="text-white hover:underline">Login here</a>
               </p>
