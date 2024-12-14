@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import img from '../images/home.png';
+import { Error } from 'mongoose';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -19,35 +20,43 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!validateEmail(email)) {
       setError('Please enter a valid email address');
       return;
     }
-
+  
     if (password.length < 6) {
       setError('Password must be at least 6 characters long');
       return;
     }
-
+  
     setError(''); // Clear previous errors
     setLoading(true); // Start loading when form is being submitted
-
+  
     try {
-      // API request to register the user
-      const response = await fetch('http://localhost:5000/api/register', {
+      const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name, email, password }),
       });
-
+  
+      // Check if the response is a JSON response
+      const contentType = response.headers.get("Content-Type");
+      if (!contentType){
+        throw new Error('Its not of contentType!');
+      } else if(!contentType.includes("application/json")) {
+        console.log(contentType);
+        throw new Error("Expected JSON response");
+      }
+  
       if (!response.ok) {
         const errorDetails = await response.json(); // Extract error details if available
         throw new Error(errorDetails.message || 'Registration failed');
       }
-
+  
       // Redirect to Add Product page after successful registration
       navigate('/add-products');
     } catch (error: any) {
@@ -56,6 +65,11 @@ const Register: React.FC = () => {
     } finally {
       setLoading(false); // Stop loading when request is done
     }
+  };
+  
+
+  const handleLoginClick = () => {
+    navigate('/login');
   };
 
   return (
@@ -119,7 +133,7 @@ const Register: React.FC = () => {
             Any further updates will be forwarded on this Email ID
           </h6>
 
-          {error && <div className="text-red-500 text-sm">{error}</div>}
+          {error && <div className="text-green-500 text-sm">{error}</div>}
           {loading && <div className="text-blue-500 text-sm">Processing...</div>}
 
           <div className="flex justify-between items-center">
@@ -134,7 +148,13 @@ const Register: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm">
                 Already have an account?{' '}
-                <a href="/login" className="text-white hover:underline">Login here</a>
+                <button
+  onClick={handleLoginClick}
+  className="text-white hover:underline bg-transparent border-none"
+>
+  Login here
+</button>
+
               </p>
             </div>
           </div>

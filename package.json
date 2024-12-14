@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,8 +19,12 @@
     "web-vitals": "^4.2.4"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/pdfkit": "^0.13.7",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }
 }
